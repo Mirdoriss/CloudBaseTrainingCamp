@@ -28,7 +28,11 @@ function signInAnonymously() {
         // console.log(res);
         // let loginState = auth.hasLoginState();
         // uid = loginState.user.uid;
-        uid = JSON.parse(window.localStorage.getItem('anonymous_uuid_'+cloudId)).content;
+        // uid = JSON.parse(window.localStorage.getItem('anonymous_uuid_'+cloudId)).content;
+        let loginState = auth.hasLoginState();
+            console.log(loginState)
+            uid = loginState.user.uid;
+            console.log(uid)
         initFlag = true;
         initlist();
     })
@@ -83,7 +87,7 @@ function deladvice(id){
             }
             else{
                 alert('删除成功！');
-                // initlist();
+                 initlist();
             }
         });
     }
@@ -104,7 +108,7 @@ function cloudCheck(){
  * 重新渲染意见列表
  * @param Array list 意见列表
  */
-function refreshlist(list){
+async function refreshlist(list){
     let el = document.getElementById("list");
     el.innerHTML="";
     advicelist = {};
@@ -133,7 +137,7 @@ function refreshlist(list){
 
             for(let n in tempitem.imgs){
                 let img = document.createElement('img');
-                img.src = cloudtohttp(tempitem.imgs[n]);
+                img.src = await cloudtohttp(tempitem.imgs[n]);
                 img.setAttribute('onclick','previewnetimg("'+img.src+'")');
                 itemimages.appendChild(img);
             }

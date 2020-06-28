@@ -3,6 +3,8 @@ const cloud = tcb.init({
 	env: cloudId
 })
 const auth = cloud.auth({persistence: "session"});
+const db = cloud.database();
+const _ = db.command;
 let initFlag = false;//云开发初始状态
 let uid = null;//云开发唯一用户id
 let advicelist = {};//意见列表
@@ -103,6 +105,14 @@ function initlist(){
 
         name: 'init-admin'
     })
+    db.collection('advice').where({
+        advice: _.neq("")
+    }).watch({
+        onChange: function (res) {
+            let list = res.docs.map(item => {
+                item.adddue = new Date(item.adddue.$date);
+                return item;
+            })
     .then((res) => {
         refreshlist(res.result.list);
     });
